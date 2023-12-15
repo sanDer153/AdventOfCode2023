@@ -1,3 +1,5 @@
+
+
 def do_cycle(platform):
     # north
     stones = [0]*len(platform[0])
@@ -49,9 +51,19 @@ def to_string(platform):
     return "\n".join(["".join(line) for line in platform])
 
 
+def calc_load(platform_string):
+    load = 0
+    platform = [list(line) for line in platform_string.split('\n')]
+    for row in range(len(platform)-1, -1, -1):
+        r = platform[row]
+        r = platform[row].count('O')
+        load += (len(platform) - row - 1) * r
+    return load
+
+
 def main():
     cycles = []
-    with open("14/test.txt") as f:
+    with open("14/input.txt") as f:
         platform = [["#"]+list(line.rstrip())+["#"] for line in f]
         platform.append(["#"]*len(platform[0]))
         platform.insert(0, ["#"]*len(platform[0]))
@@ -64,15 +76,10 @@ def main():
     period_start = cycles.index(platform_string)
     period_len = len(cycles)-period_start
     result_cycle = cycles[((1000000000-period_start) %
-                           period_len)+period_start]
+                           period_len)+period_start-1]
+    print(calc_load(result_cycle))
 
-    load = 0
-    platfrom = [list(line.rstrip()) for line in result_cycle]
-    for row in range(len(platform)-1, -1, -1):
-        r = platform[row].count('O')
-        load += (len(platform) - row - 1) * r
-
-    print(load)
+    # Kan men fout ni vinden, zie sol.py voor oplossing van internet
 
 
 if __name__ == "__main__":
